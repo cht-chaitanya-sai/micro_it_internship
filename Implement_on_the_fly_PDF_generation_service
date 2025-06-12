@@ -1,0 +1,37 @@
+from flask import Flask, request, make_response
+from weasyprint import HTML
+
+app = Flask(__name__)
+
+@app.route('/offer-letter', methods=['POST'])
+def generate_offer_letter():
+    data = request.json
+    name = data.get('name', 'Candidate')
+    role = data.get('role', 'Intern')
+    duration = data.get('duration', '3 months')
+
+    html = f"""
+    <h1>Internship Offer Letter</h1>
+    <p>Dear <strong>{name}</strong>,</p>
+    <p>We are pleased to offer you the position of <strong>{role}</strong> for a duration of <strong>{duration}</strong>.</p>
+    <p>We look forward to working with you.</p>
+    """
+
+    pdf = HTML(string=html).write_pdf()
+
+    response = make_response(pdf)
+    response.headers['Content-Type'] = 'application/pdf'
+    response.headers['Content-Disposition'] = 'attachment; filename=offer_letter.pdf'
+    return response
+
+if __name__ == '__main__':
+    app.run(debug=True)
+//how to use
+{
+  "name": "Chaithu",
+  "role": "AI Intern",
+  "duration": "6 months"
+}
+curl -X POST http://localhost:5000/offer-letter \
+-H "Content-Type: application/json" \
+-d '{"name":"Chaithu","role":"AI Intern","duration":"6 months"}' --output offer_letter.pdf

@@ -1,0 +1,16 @@
+rates = {
+    'USD': 1.0,
+    'INR': 83.2,
+    'EUR': 0.93,
+    'JPY': 157.0
+}
+
+f = input("From (USD/INR/EUR/JPY): ").upper()
+t = input("To (USD/INR/EUR/JPY): ").upper()
+a = float(input("Amount: "))
+
+if f in rates and t in rates:
+    result = a * rates[t] / rates[f]
+    print(f"{a} {f} = {result:.2f} {t}")
+else:
+    print("Currency not supported.")
